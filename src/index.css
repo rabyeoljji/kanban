@@ -64,6 +64,21 @@ button:hover {
   overflow: auto;
 }
 
+.board::-webkit-scrollbar {
+  width: 3px;
+}
+
+.board::-webkit-scrollbar-thumb {
+  height: 20%;
+  background: #c6b2fa;
+
+  border-radius: 10px;
+}
+
+.board::-webkit-scrollbar-track {
+  background: rgba(187, 150, 229, 0);
+}
+
 .board.add {
   display: flex;
   justify-content: center;
