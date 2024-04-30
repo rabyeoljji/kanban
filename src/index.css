@@ -1,5 +1,9 @@
 @import url("./assets/styles/reset.css");
 
+*:focus {
+  outline-color: #a083e8;
+}
+
 #app {
   display: flex;
   flex-direction: column;
