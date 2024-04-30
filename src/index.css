@@ -1,0 +1,274 @@
+@import url("./assets/styles/reset.css");
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: #f6f3ff;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+
+  color: #8662df;
+
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  background-color: #f6f3ff;
+  border-color: #a083e8;
+  color: #a083e8;
+}
+
+.todo-container {
+  display: flex;
+
+  width: 100%;
+  overflow: auto;
+}
+
+.todo-container::-webkit-scrollbar {
+  width: 3px;
+}
+
+.todo-container::-webkit-scrollbar-thumb {
+  height: 30%;
+  background: #a083e8;
+
+  border-radius: 10px;
+}
+
+.todo-container::-webkit-scrollbar-track {
+  background: rgba(187, 150, 229, 0.1);
+}
+
+.board {
+  flex-shrink: 0;
+
+  width: 350px;
+  height: 480px;
+
+  border: 1px solid #f0ebff;
+  border-radius: 16px;
+  margin: 30px 0 30px 30px;
+
+  background-color: white;
+  overflow: auto;
+}
+
+.board.add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid #a083e8;
+  margin-right: 30px;
+}
+.plus-btn {
+  height: 25px;
+  color: #a083e8;
+  font-size: 2rem;
+}
+.board.add:hover {
+  background-color: white;
+  box-shadow: 1px 1px 10px 5px #e8e2fb;
+}
+
+.board-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.board-header {
+  display: flex;
+
+  padding: 15px;
+}
+
+.total {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  background-color: #f6f3ff;
+  border-radius: 5px;
+
+  font-size: 0.8rem;
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+
+  margin-left: 15px;
+
+  font-weight: bold;
+}
+
+.board-control {
+  padding: 15px;
+}
+.kanban-delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  border: 1px solid #c0c0c0;
+  border-radius: 10px;
+  color: #909090;
+}
+
+.todo {
+  display: flex;
+  padding: 15px;
+}
+
+.todo-item {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 1px 1px 10px 2px #f0ebff;
+
+  padding: 20px 25px;
+}
+
+.todo-item.add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 2rem;
+  border: 1px solid #a083e8;
+
+  padding: 15px;
+}
+.todo-item.add:hover {
+  background-color: white;
+  box-shadow: 1px 1px 10px 5px #e8e2fb;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 10px;
+}
+
+.item-title {
+  display: flex;
+  align-items: center;
+}
+.item-title-icon {
+  margin-right: 5px;
+}
+
+.add-title {
+  width: 240px;
+  height: 30px;
+  padding: 8px 5px 0 0;
+
+  color: #909090;
+}
+.add-title::after {
+  display: inline-block;
+  content: "";
+  width: 100%;
+  height: 0.5px;
+  background-color: #c0c0c0;
+}
+.todo-content.add-content {
+  color: #c0c0c0;
+}
+.add-item .todo-control {
+  display: flex;
+  justify-content: space-between;
+}
+.add-item button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 120px;
+  padding: 8px 0;
+  border: 1px solid #c0c0c0;
+  border-radius: 10px;
+
+  font-size: 0.8rem;
+}
+.add-item button:hover {
+  background-color: white;
+  box-shadow:
+    1px 1px 3px 1px #e8e2fb,
+    -1px -1px 3px 1px #e8e2fb;
+}
+
+.delete-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  border: 1px solid #c0c0c0;
+  border-radius: 10px;
+  color: #909090;
+}
+
+.todo-content {
+  min-height: 70px;
+  color: #909090;
+
+  margin: 5px 0;
+  padding: 5px 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+
+  padding: 5px 8px;
+  border-radius: 20px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+
+  font-size: 0.8rem;
+  background-color: #e6e6e6;
+}
+.tags button {
+  margin-left: 5px;
+}
+.tags button:hover {
+  background-color: inherit;
+  color: inherit;
+}
+.tag.add-tag-btn {
+  border: 1px solid #c0c0c0;
+
+  color: #c0c0c0;
+  background-color: white;
+}
+.tag > .add-btn {
+  font-size: 1rem;
+  height: 12px;
+}
