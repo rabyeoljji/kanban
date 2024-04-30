@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import "./index.css";
 import { addListButtonTemplate, addTodoTemplate, listHeaderTemplate, todoListTemplate } from "./templates/template";
+import { KANBAN_LIST } from "./constants/storageKEY";
 
 class KanbanApp {
   kanban: TodoList[];
@@ -32,6 +33,7 @@ class KanbanApp {
       $board.append(fragment, $addListButton);
     }
     this.attachEvent();
+    window.localStorage.setItem(KANBAN_LIST, JSON.stringify(this.kanban));
   }
 
   // 이벤트 함수
@@ -263,5 +265,6 @@ class KanbanApp {
     return $list;
   }
 }
-
-new KanbanApp(defaultKanban);
+const storageData = window.localStorage.getItem(KANBAN_LIST);
+const loadKanban = storageData ? JSON.parse(storageData) : defaultKanban;
+new KanbanApp(loadKanban);
