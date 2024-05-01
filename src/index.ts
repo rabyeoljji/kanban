@@ -1,4 +1,4 @@
-import { Todo, TodoList } from "./type";
+import { Tag, Todo, TodoList, inProgressTodo, isButtonElement } from "./type";
 import { defaultKanban } from "./mock";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,11 +11,10 @@ class KanbanApp {
 
   constructor(data: TodoList[]) {
     this.kanban = data;
-
     this.render();
   }
 
-  // 렌더링 하는 함수
+  // ----------------------- 렌더링 하는 함수
   render() {
     const $addListButton = document.createElement("button");
     $addListButton.classList.add("board", "add");
@@ -36,7 +35,7 @@ class KanbanApp {
     window.localStorage.setItem(KANBAN_LIST, JSON.stringify(this.kanban));
   }
 
-  // 이벤트 함수
+  // ----------------------- 이벤트 함수
   attachEvent() {
     const $addListButton = document.querySelector(".board.add");
     const $removeListButton = document.querySelectorAll(".kanban-delete");
@@ -81,14 +80,16 @@ class KanbanApp {
 
     $removeListButton?.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        const [, selectedId] = (currentTarget as HTMLButtonElement).id.split("kanban-");
-        this.removeKanban(selectedId);
+        if (currentTarget && isButtonElement(currentTarget)) {
+          const [, selectedId] = currentTarget.id.split("kanban-");
+          this.removeKanban(selectedId);
+        }
       });
     });
 
     $addTodoButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (currentTarget instanceof HTMLButtonElement) {
+        if (currentTarget && isButtonElement(currentTarget)) {
           const [, category] = currentTarget.id.split("add-todo-");
           currentTarget.closest(".wrapper")?.prepend(this.addTodo(category));
         }
@@ -97,7 +98,7 @@ class KanbanApp {
 
     $removeTodoButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (currentTarget && currentTarget instanceof HTMLButtonElement) {
+        if (currentTarget && isButtonElement(currentTarget)) {
           const $closestTodo = currentTarget.closest(".todo");
           if (!$closestTodo) {
             console.log("error: closest todo가 존재하지 않습니다");
@@ -113,7 +114,7 @@ class KanbanApp {
 
     $addTagButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (!(currentTarget instanceof HTMLButtonElement)) return;
+        if (!(currentTarget && isButtonElement(currentTarget))) return;
 
         const category = currentTarget.closest(".todo")?.id.split("-")[0];
         const selectedId = currentTarget.id.split("todo-")[1];
@@ -126,7 +127,7 @@ class KanbanApp {
 
     $removeTagButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (!(currentTarget instanceof HTMLButtonElement)) return;
+        if (!(currentTarget && isButtonElement(currentTarget))) return;
 
         const category = currentTarget.closest(".todo")?.id.split("-")[0];
 
@@ -138,7 +139,16 @@ class KanbanApp {
     });
   }
 
-  addTag({ category, selectedId, tagContent }: { category?: string; selectedId: string; tagContent?: string }) {
+  // ----------------------- 태그를 추가하는 함수
+  addTag({
+    category,
+    selectedId,
+    tagContent,
+  }: {
+    category?: Todo["category"];
+    selectedId: Todo["id"];
+    tagContent?: Tag["content"];
+  }) {
     const kanbanId = this.kanban.findIndex((kanban) => kanban.title === category);
     const targetKanban = this.kanban.find((kanban) => kanban.title === category);
 
@@ -157,14 +167,15 @@ class KanbanApp {
     this.render();
   }
 
+  // ----------------------- 태그를 삭제하는 함수
   removeTag({
     category,
     selectedTagId,
     selectedTodoId,
   }: {
-    category?: string;
-    selectedTagId: string;
-    selectedTodoId?: string;
+    category?: Todo["category"];
+    selectedTagId: Tag["id"];
+    selectedTodoId?: Todo["id"];
   }) {
     const kanbanId = this.kanban.findIndex((kanban) => kanban.title === category);
     const targetKanban = this.kanban.find((kanban) => kanban.title === category);
@@ -182,7 +193,8 @@ class KanbanApp {
     }
   }
 
-  removeTodo(selectedId: string, category: string) {
+  // ----------------------- TodoItem을 삭제하는 함수
+  removeTodo(selectedId: Todo["id"], category: Todo["category"]) {
     const kanbanId = this.kanban.findIndex((kanban) => kanban.title === category);
     const targetKanban = this.kanban.find((kanban) => kanban.title === category);
 
@@ -194,7 +206,8 @@ class KanbanApp {
     }
   }
 
-  addTodo(category: string) {
+  // ----------------------- TodoItem을 추가하는 함수
+  addTodo(category: Todo["category"]) {
     const $list = document.createElement("section");
     $list.classList.add("todo");
     $list.setAttribute("id", "add-item");
@@ -206,7 +219,7 @@ class KanbanApp {
     $list.querySelector(".add")?.addEventListener("click", ({ currentTarget }) => {
       const listId = this.kanban.findIndex(({ title }) => title === category);
 
-      if (currentTarget && currentTarget instanceof HTMLButtonElement) {
+      if (currentTarget && isButtonElement(currentTarget)) {
         const $todo = currentTarget.closest(".todo-item");
         const title = $todo?.querySelector(".add-title")?.textContent;
         const body = $todo?.querySelector(".add-content")?.textContent;
@@ -214,7 +227,7 @@ class KanbanApp {
         const todoList = this.kanban[listId].list ?? [];
         const newTodoId = todoList.length > 0 ? uuidv4() : "0";
 
-        const newTodo: Todo = {
+        const newTodo: inProgressTodo = {
           id: newTodoId,
           content: {
             title: title ?? "",
@@ -234,11 +247,13 @@ class KanbanApp {
     return $list;
   }
 
-  removeKanban(selectedId: string) {
+  // ----------------------- Kanban을 삭제하는 함수
+  removeKanban(selectedId: TodoList["id"]) {
     this.kanban = this.kanban.filter((kanban) => kanban.id !== selectedId);
     this.render();
   }
 
+  // ----------------------- Kanban을 추가하는 함수
   generateKanban({ id, title, list }: TodoList) {
     const $list = document.createElement("section");
     $list.classList.add("board");
